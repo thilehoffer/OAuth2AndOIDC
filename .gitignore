@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/ImageGallery
+/ImageGallery.API/bin/Debug/net8.0
+/Company.IDP/obj/Debug/net8.0
+/ImageGallery.API/obj/Debug/net8.0
+/ImageGallery.Client/bin/Debug/net8.0
+/ImageGallery.Model/bin/Debug/net8.0
