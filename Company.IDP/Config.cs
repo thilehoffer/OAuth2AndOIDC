@@ -1,5 +1,6 @@
 ﻿using Duende.IdentityServer.Models;
 using Duende.IdentityServer;
+using static System.Net.WebRequestMethods;
 namespace Company.IDP;
 
 public static class Config {
@@ -23,11 +24,13 @@ public static class Config {
 					AllowedGrantTypes = GrantTypes.Code,
 					RedirectUris = {
 					 "https://localhost:7184/signin-oidc"
+                    },
+                    PostLogoutRedirectUris = {
+						"https://localhost:7184/signout-callback-oidc"
 					},
 					AllowedScopes = {
 						 IdentityServerConstants.StandardScopes.OpenId,
 						 IdentityServerConstants.StandardScopes.Profile
-
 					},
 					ClientSecrets = {
 						new Secret("secret".Sha256())
