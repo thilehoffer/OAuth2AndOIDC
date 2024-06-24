@@ -36,6 +36,7 @@ public static class TestUsers
 					Password = "password",
 					Claims =
 					{
+						new Claim("role", "PayingUser"),
 						new Claim(JwtClaimTypes.GivenName, "Emma"),
 						new Claim(JwtClaimTypes.FamilyName, "Flagg")  }
 				}
