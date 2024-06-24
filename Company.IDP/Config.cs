@@ -9,7 +9,9 @@ public static class Config {
 		{
 			new IdentityResources.OpenId(),
             //Adding support for users
-            new IdentityResources.Profile()
+            new IdentityResources.Profile(),
+
+			new IdentityResource("roles", "Your role(s)", new [] {"role"} )
 		};
 
 	public static IEnumerable<ApiScope> ApiScopes =>
@@ -30,7 +32,8 @@ public static class Config {
 					},
 					AllowedScopes = {
 						 IdentityServerConstants.StandardScopes.OpenId,
-						 IdentityServerConstants.StandardScopes.Profile
+						 IdentityServerConstants.StandardScopes.Profile,
+						 "roles"
 					},
 					ClientSecrets = {
 						new Secret("secret".Sha256())

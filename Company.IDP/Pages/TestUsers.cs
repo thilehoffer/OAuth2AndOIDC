@@ -25,6 +25,7 @@ public static class TestUsers
 					Password = "password",
 					Claims =
 					{
+						new Claim("role", "FreeUser"),
 						new Claim(JwtClaimTypes.GivenName, "David"),
 						new Claim(JwtClaimTypes.FamilyName, "Flagg")  }
 				},

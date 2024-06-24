@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews()
 	.AddJsonOptions(configure =>
 		configure.JsonSerializerOptions.PropertyNamingPolicy = null);
+
+//Prevously mapped for backwards compativility by MS?
+JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 // create an HttpClient used for accessing the API
 builder.Services.AddHttpClient("APIClient", client => {
@@ -34,6 +39,13 @@ builder.Services.AddAuthentication(options => {
 	 
 	options.SaveTokens = true;
 	options.GetClaimsFromUserInfoEndpoint = true;
+
+	//Stop middleware from removing a claim weird
+	options.ClaimActions.Remove("aud");
+	 
+	options.ClaimActions.DeleteClaim("sid");
+	options.Scope.Add("roles");
+	options.ClaimActions.MapJsonKey("role", "role");
 });
 
 
