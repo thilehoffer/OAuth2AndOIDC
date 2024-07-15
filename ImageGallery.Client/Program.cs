@@ -14,18 +14,22 @@ builder.Services.AddControllersWithViews()
 //Prevously mapped for backwards compativility by MS?
 JsonWebTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
+builder.Services.AddAccessTokenManagement();
+
 // create an HttpClient used for accessing the API
 builder.Services.AddHttpClient("APIClient", client => {
 	client.BaseAddress = new Uri(builder.Configuration["ImageGalleryAPIRoot"]);
 	client.DefaultRequestHeaders.Clear();
 	client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
-});
+}).AddUserAccessTokenHandler();
 
 builder.Services.AddAuthentication(options => {
 	options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 	options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
 })
- .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+ .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => {
+	 options.AccessDeniedPath = "/Authentication/AccessDenied";
+ })
 .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options => {
 	options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 	options.Authority = "https://localhost:5001";
@@ -45,6 +49,7 @@ builder.Services.AddAuthentication(options => {
 	 
 	options.ClaimActions.DeleteClaim("sid");
 	options.Scope.Add("roles");
+	options.Scope.Add("imagegallery.fullaccess");
 	options.ClaimActions.MapJsonKey("role", "role");
 
 	options.TokenValidationParameters = new() { 
