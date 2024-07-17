@@ -1,29 +1,23 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace ImageGallery.API.Migrations
-{
+namespace ImageGallery.API.Migrations {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
-    {
+    public partial class InitialMigration : Migration {
         /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
+        protected override void Up(MigrationBuilder migrationBuilder) {
             migrationBuilder.CreateTable(
                 name: "Images",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Title = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
                     FileName = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
                     OwnerId = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false)
-                },
-                constraints: table =>
-                {
+                    },
+                constraints: table => {
                     table.PrimaryKey("PK_Images", x => x.Id);
                 });
 
@@ -47,13 +41,12 @@ namespace ImageGallery.API.Migrations
                     { new Guid("d3118665-43e3-4905-8848-5e335a428dd5"), "cc412f08-2a7b-4225-b659-07fdb168302d.jpg", "b7539694-97e7-4dfe-84da-b4256e1ff5c7", "An image by Emma" },
                     { new Guid("d70f656d-75a7-45fc-b385-e4daa834e6a8"), "6b33c074-65cf-4f2b-913a-1b2d4deb7050.jpg", "d860efca-22d9-47fd-8249-791ba61b07c7", "An image by David" }
                 });
-        }
+            }
 
         /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
+        protected override void Down(MigrationBuilder migrationBuilder) {
             migrationBuilder.DropTable(
                 name: "Images");
+            }
         }
     }
-}

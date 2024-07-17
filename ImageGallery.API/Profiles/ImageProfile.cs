@@ -1,15 +1,8 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace ImageGallery.API.Profiles
-{
-    public class ImageProfile : Profile
-    {
-        public ImageProfile()
-        {
+namespace ImageGallery.API.Profiles {
+    public class ImageProfile : Profile {
+        public ImageProfile() {
             // map from Image (entity) to Image, and back
             CreateMap<Entities.Image, Model.Image>().ReverseMap();
 
@@ -26,6 +19,6 @@ namespace ImageGallery.API.Profiles
                 .ForMember(m => m.FileName, options => options.Ignore())
                 .ForMember(m => m.Id, options => options.Ignore())
                 .ForMember(m => m.OwnerId, options => options.Ignore());
+            }
         }
     }
-}

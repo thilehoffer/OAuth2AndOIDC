@@ -1,10 +1,7 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace ImageGallery.API.Entities
-{
-    public class Image
-    {
+namespace ImageGallery.API.Entities {
+    public class Image {
         [Key]
         public Guid Id { get; set; }
 
@@ -19,5 +16,5 @@ namespace ImageGallery.API.Entities
         [Required]
         [MaxLength(50)]
         public string OwnerId { get; set; } = string.Empty;
+        }
     }
-}

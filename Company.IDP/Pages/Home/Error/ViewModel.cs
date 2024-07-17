@@ -5,16 +5,13 @@ using Duende.IdentityServer.Models;
 
 namespace Company.IDP.Pages.Error;
 
-public class ViewModel
-{
-    public ViewModel()
-    {
-    }
+public class ViewModel {
+    public ViewModel() {
+        }
 
-    public ViewModel(string error)
-    {
+    public ViewModel(string error) {
         Error = new ErrorMessage { Error = error };
-    }
+        }
 
     public ErrorMessage? Error { get; set; }
-}
+    }

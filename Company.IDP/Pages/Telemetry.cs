@@ -11,10 +11,9 @@ namespace Company.IDP.Pages;
 /// <summary>
 /// Telemetry helpers for the UI
 /// </summary>
-public static class Telemetry
-{
+public static class Telemetry {
     private static readonly string ServiceVersion = typeof(Telemetry).Assembly.GetName().Version!.ToString();
-    
+
     /// <summary>
     /// Service name for telemetry.
     /// </summary>
@@ -23,42 +22,38 @@ public static class Telemetry
     /// <summary>
     /// Metrics configuration
     /// </summary>
-    public static class Metrics
-    {
+    public static class Metrics {
 #pragma warning disable 1591
 
         /// <summary>
         /// Name of Counters
         /// </summary>
-        public static class Counters
-        {
+        public static class Counters {
             public const string Consent = "tokenservice.consent";
             public const string GrantsRevoked = "tokenservice.grants_revoked";
             public const string UserLogin = "tokenservice.user_login";
             public const string UserLogout = "tokenservice.user_logout";
-        }
+            }
 
         /// <summary>
         /// Name of tags
         /// </summary>
-        public static class Tags
-        {
+        public static class Tags {
             public const string Client = "client";
             public const string Error = "error";
             public const string Idp = "idp";
             public const string Remember = "remember";
             public const string Scope = "scope";
             public const string Consent = "consent";
-        }
+            }
 
         /// <summary>
         /// Values of tags
         /// </summary>
-        public static class TagValues
-        {
+        public static class TagValues {
             public const string Granted = "granted";
             public const string Denied = "denied";
-        }
+            }
 
 #pragma warning restore 1591
 
@@ -75,19 +70,17 @@ public static class Telemetry
         /// </summary>
         /// <param name="clientId">Client id</param>
         /// <param name="scopes">Scope names. Each element is added on it's own to the counter</param>
-        public static void ConsentGranted(string clientId, IEnumerable<string> scopes, bool remember)
-        {
+        public static void ConsentGranted(string clientId, IEnumerable<string> scopes, bool remember) {
             ArgumentNullException.ThrowIfNull(scopes);
 
-            foreach (var scope in scopes)
-            {
+            foreach (var scope in scopes) {
                 ConsentCounter.Add(1,
                     new(Tags.Client, clientId),
                     new(Tags.Scope, scope),
                     new(Tags.Remember, remember),
                     new(Tags.Consent, TagValues.Granted));
+                }
             }
-        }
 
         /// <summary>
         /// Helper method to increase <see cref="Counters.ConsentDenied"/> counter. The scopes
@@ -95,14 +88,12 @@ public static class Telemetry
         /// </summary>
         /// <param name="clientId">Client id</param>
         /// <param name="scopes">Scope names. Each element is added on it's own to the counter</param>
-        public static void ConsentDenied(string clientId, IEnumerable<string> scopes)
-        {
+        public static void ConsentDenied(string clientId, IEnumerable<string> scopes) {
             ArgumentNullException.ThrowIfNull(scopes);
-            foreach (var scope in scopes)
-            {
+            foreach (var scope in scopes) {
                 ConsentCounter.Add(1, new(Tags.Client, clientId), new(Tags.Scope, scope), new(Tags.Consent, TagValues.Denied));
+                }
             }
-        }
 
         private static Counter<long> GrantsRevokedCounter = Meter.CreateCounter<long>(Counters.GrantsRevoked);
 
@@ -138,5 +129,5 @@ public static class Telemetry
         /// <param name="idp">Idp/authentication scheme for external authentication, or "local" for built in.</param>
         public static void UserLogout(string? idp)
             => UserLogoutCounter.Add(1, tag: new(Tags.Idp, idp));
+        }
     }
-}

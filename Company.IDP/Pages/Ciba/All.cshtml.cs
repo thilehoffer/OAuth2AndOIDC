@@ -10,19 +10,16 @@ namespace Company.IDP.Pages.Ciba;
 
 [SecurityHeaders]
 [Authorize]
-public class AllModel : PageModel
-{
+public class AllModel : PageModel {
     public IEnumerable<BackchannelUserLoginRequest> Logins { get; set; } = default!;
 
     private readonly IBackchannelAuthenticationInteractionService _backchannelAuthenticationInteraction;
 
-    public AllModel(IBackchannelAuthenticationInteractionService backchannelAuthenticationInteractionService)
-    {
+    public AllModel(IBackchannelAuthenticationInteractionService backchannelAuthenticationInteractionService) {
         _backchannelAuthenticationInteraction = backchannelAuthenticationInteractionService;
-    }
+        }
 
-    public async Task OnGet()
-    {
+    public async Task OnGet() {
         Logins = await _backchannelAuthenticationInteraction.GetPendingLoginRequestsForCurrentUserAsync();
+        }
     }
-}

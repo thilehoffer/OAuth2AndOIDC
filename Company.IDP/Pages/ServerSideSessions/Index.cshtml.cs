@@ -7,16 +7,13 @@ using Duende.IdentityServer.Stores;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Company.IDP.Pages.ServerSideSessions
-{
-    public class IndexModel : PageModel
-    {
+namespace Company.IDP.Pages.ServerSideSessions {
+    public class IndexModel : PageModel {
         private readonly ISessionManagementService? _sessionManagementService;
 
-        public IndexModel(ISessionManagementService? sessionManagementService = null)
-        {
+        public IndexModel(ISessionManagementService? sessionManagementService = null) {
             _sessionManagementService = sessionManagementService;
-        }
+            }
 
         public QueryResult<UserSession>? UserSessions { get; set; }
 
@@ -35,33 +32,29 @@ namespace Company.IDP.Pages.ServerSideSessions
         [BindProperty(SupportsGet = true)]
         public string? Prev { get; set; }
 
-        public async Task OnGet()
-        {
-            if (_sessionManagementService != null)
-            {
-                UserSessions = await _sessionManagementService.QuerySessionsAsync(new SessionQuery
-                {
+        public async Task OnGet() {
+            if (_sessionManagementService != null) {
+                UserSessions = await _sessionManagementService.QuerySessionsAsync(new SessionQuery {
                     ResultsToken = Token,
                     RequestPriorResults = Prev == "true",
                     DisplayName = DisplayNameFilter,
                     SessionId = SessionIdFilter,
                     SubjectId = SubjectIdFilter
-                });
+                    });
+                }
             }
-        }
 
         [BindProperty]
         public string? SessionId { get; set; }
 
-        public async Task<IActionResult> OnPost()
-        {
+        public async Task<IActionResult> OnPost() {
             ArgumentNullException.ThrowIfNull(_sessionManagementService);
 
-            await _sessionManagementService.RemoveSessionsAsync(new RemoveSessionsContext { 
+            await _sessionManagementService.RemoveSessionsAsync(new RemoveSessionsContext {
                 SessionId = SessionId,
-            });
+                });
             return RedirectToPage("/ServerSideSessions/Index", new { Token, DisplayNameFilter, SessionIdFilter, SubjectIdFilter, Prev });
+            }
         }
     }
-}
 

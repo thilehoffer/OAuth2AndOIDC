@@ -1,6 +1,5 @@
-﻿using Duende.IdentityServer.Models;
-using Duende.IdentityServer;
-using static System.Net.WebRequestMethods;
+﻿using Duende.IdentityServer;
+using Duende.IdentityServer.Models;
 namespace Company.IDP;
 
 public static class Config {
@@ -14,9 +13,10 @@ public static class Config {
             new IdentityResource("roles", "Your role(s)", new [] {"role"} )
         };
 
-
     public static IEnumerable<ApiResource> ApiResources => [
-        new ApiResource ("imagegalleryapi", "Image Gallery API"){ 
+        new ApiResource ("imagegalleryapi", "Image Gallery API",
+            ["role"]
+            ){
                 Scopes = { "imagegallery.fullaccess" }
         }
     ];
@@ -43,8 +43,10 @@ public static class Config {
                     },
                     ClientSecrets = {
                         new Secret("secret".Sha256())
-                    }
+                    },
+                    //This paramter cause consent screen that shows and allows access 
+                    RequireConsent = true
 
                 }
             ];
-}
+    }

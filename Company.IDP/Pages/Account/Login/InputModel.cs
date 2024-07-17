@@ -5,8 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Company.IDP.Pages.Login;
 
-public class InputModel
-{
+public class InputModel {
     [Required]
     public string? Username { get; set; }
     [Required]
@@ -14,4 +13,4 @@ public class InputModel
     public bool RememberLogin { get; set; }
     public string? ReturnUrl { get; set; }
     public string? Button { get; set; }
-}
+    }

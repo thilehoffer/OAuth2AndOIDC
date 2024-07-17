@@ -8,18 +8,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Company.IDP.Pages.Redirect;
 
 [AllowAnonymous]
-public class IndexModel : PageModel
-{
+public class IndexModel : PageModel {
     public string? RedirectUri { get; set; }
 
-    public IActionResult OnGet(string? redirectUri)
-    {
-        if (!Url.IsLocalUrl(redirectUri))
-        {
+    public IActionResult OnGet(string? redirectUri) {
+        if (!Url.IsLocalUrl(redirectUri)) {
             return RedirectToPage("/Home/Error/Index");
-        }
+            }
 
         RedirectUri = redirectUri;
         return Page();
+        }
     }
-}

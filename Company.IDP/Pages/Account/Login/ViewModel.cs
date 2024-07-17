@@ -3,8 +3,7 @@
 
 namespace Company.IDP.Pages.Login;
 
-public class ViewModel
-{
+public class ViewModel {
     public bool AllowRememberLogin { get; set; } = true;
     public bool EnableLocalLogin { get; set; } = true;
 
@@ -13,16 +12,14 @@ public class ViewModel
 
     public bool IsExternalLoginOnly => EnableLocalLogin == false && ExternalProviders?.Count() == 1;
     public string? ExternalLoginScheme => IsExternalLoginOnly ? ExternalProviders?.SingleOrDefault()?.AuthenticationScheme : null;
-        
-    public class ExternalProvider
-    {
-        public ExternalProvider(string authenticationScheme, string? displayName = null)
-        {
+
+    public class ExternalProvider {
+        public ExternalProvider(string authenticationScheme, string? displayName = null) {
             AuthenticationScheme = authenticationScheme;
             DisplayName = displayName;
-        }
+            }
 
         public string? DisplayName { get; set; }
         public string AuthenticationScheme { get; set; }
+        }
     }
-}

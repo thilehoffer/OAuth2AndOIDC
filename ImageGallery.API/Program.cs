@@ -11,8 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers()
     .AddJsonOptions(configure => configure.JsonSerializerOptions.PropertyNamingPolicy = null);
 
-builder.Services.AddDbContext<GalleryContext>(options =>
-{
+builder.Services.AddDbContext<GalleryContext>(options => {
     options.UseSqlite(
         builder.Configuration["ConnectionStrings:ImageGalleryDBConnectionString"]);
 });
@@ -33,10 +32,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).
             ValidTypes = new[] { "at+jwt" },
             NameClaimType = "given_name",
             RoleClaimType = "role"
-        };
-        
-        
-        
+            };
+
+
+
     });
 
 var app = builder.Build();

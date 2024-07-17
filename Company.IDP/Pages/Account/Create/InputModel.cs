@@ -5,8 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Company.IDP.Pages.Create;
 
-public class InputModel
-{
+public class InputModel {
     [Required]
     public string? Username { get; set; }
 
@@ -19,4 +18,4 @@ public class InputModel
     public string? ReturnUrl { get; set; }
 
     public string? Button { get; set; }
-}
+    }

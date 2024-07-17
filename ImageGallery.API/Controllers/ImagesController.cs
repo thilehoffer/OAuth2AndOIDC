@@ -1,64 +1,79 @@
 ﻿using AutoMapper;
 using ImageGallery.API.Services;
 using ImageGallery.Model;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-namespace ImageGallery.API.Controllers
-{
+namespace ImageGallery.API.Controllers {
     [Route("api/images")]
     [ApiController]
     [Authorize]
-    public class ImagesController : ControllerBase
-    {
+    public class ImagesController : ControllerBase {
         private readonly IGalleryRepository _galleryRepository;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly IMapper _mapper;
 
+
+        private string GetUserId() {
+
+            var ownerId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            if (ownerId == null) {
+                throw new Exception($"Owner idenditifer not found in token. User Identity = {User.Identity?.ToString()} Check log for api token.");
+
+                }
+
+            return ownerId;
+            }
         public ImagesController(
             IGalleryRepository galleryRepository,
             IWebHostEnvironment hostingEnvironment,
-            IMapper mapper)
-        {
-            _galleryRepository = galleryRepository ?? 
+            IMapper mapper) {
+            _galleryRepository = galleryRepository ??
                 throw new ArgumentNullException(nameof(galleryRepository));
-            _hostingEnvironment = hostingEnvironment ?? 
+            _hostingEnvironment = hostingEnvironment ??
                 throw new ArgumentNullException(nameof(hostingEnvironment));
-            _mapper = mapper ?? 
+            _mapper = mapper ??
                 throw new ArgumentNullException(nameof(mapper));
-        }
+            }
 
         [HttpGet()]
-        public async Task<ActionResult<IEnumerable<Image>>> GetImages()
-        {
+        public async Task<ActionResult<IEnumerable<Image>>> GetImages() {
+
+
+
+
             // get from repo
-            var imagesFromRepo = await _galleryRepository.GetImagesAsync();
+            var imagesFromRepo = await _galleryRepository.GetImagesAsync(GetUserId());
 
             // map to model
             var imagesToReturn = _mapper.Map<IEnumerable<Image>>(imagesFromRepo);
 
+
+
+
             // return
             return Ok(imagesToReturn);
-        }
+            }
 
         [HttpGet("{id}", Name = "GetImage")]
-        public async Task<ActionResult<Image>> GetImage(Guid id)
-        {          
+        public async Task<ActionResult<Image>> GetImage(Guid id) {
             var imageFromRepo = await _galleryRepository.GetImageAsync(id);
 
-            if (imageFromRepo == null)
-            {
+            if (imageFromRepo?.OwnerId != GetUserId()) {
+                throw new Exception("User does not have access to image");
+                }
+
+            if (imageFromRepo == null) {
                 return NotFound();
-            }
+                }
 
             var imageToReturn = _mapper.Map<Image>(imageFromRepo);
 
             return Ok(imageToReturn);
-        }
+            }
 
         [HttpPost()]
-        public async Task<ActionResult<Image>> CreateImage([FromBody] ImageForCreation imageForCreation)
-        {
+        public async Task<ActionResult<Image>> CreateImage([FromBody] ImageForCreation imageForCreation) {
             // Automapper maps only the Title in our configuration
             var imageEntity = _mapper.Map<Entities.Image>(imageForCreation);
 
@@ -71,7 +86,7 @@ namespace ImageGallery.API.Controllers
 
             // create the filename
             string fileName = Guid.NewGuid().ToString() + ".jpg";
-            
+
             // the full file path
             var filePath = Path.Combine($"{webRootPath}/images/{fileName}");
 
@@ -95,34 +110,31 @@ namespace ImageGallery.API.Controllers
             return CreatedAtRoute("GetImage",
                 new { id = imageToReturn.Id },
                 imageToReturn);
-        }
+            }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteImage(Guid id)
-        {            
+        public async Task<IActionResult> DeleteImage(Guid id) {
             var imageFromRepo = await _galleryRepository.GetImageAsync(id);
 
-            if (imageFromRepo == null)
-            {
+            if (imageFromRepo == null) {
                 return NotFound();
-            }
+                }
 
             _galleryRepository.DeleteImage(imageFromRepo);
 
             await _galleryRepository.SaveChangesAsync();
 
             return NoContent();
-        }
+            }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateImage(Guid id, 
-            [FromBody] ImageForUpdate imageForUpdate)
-        {
+        public async Task<IActionResult> UpdateImage(Guid id,
+            [FromBody] ImageForUpdate imageForUpdate) {
             var imageFromRepo = await _galleryRepository.GetImageAsync(id);
-            if (imageFromRepo == null)
-            {
+            if (imageFromRepo == null) {
                 return NotFound();
-            }
+                }
+
 
             _mapper.Map(imageForUpdate, imageFromRepo);
 
@@ -131,6 +143,6 @@ namespace ImageGallery.API.Controllers
             await _galleryRepository.SaveChangesAsync();
 
             return NoContent();
+            }
         }
     }
-}

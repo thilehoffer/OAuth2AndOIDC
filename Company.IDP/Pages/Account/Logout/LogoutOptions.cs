@@ -4,8 +4,7 @@
 
 namespace Company.IDP.Pages.Logout;
 
-public static class LogoutOptions
-{
+public static class LogoutOptions {
     public static readonly bool ShowLogoutPrompt = true;
     public static readonly bool AutomaticRedirectAfterSignOut = true;
-}
+    }

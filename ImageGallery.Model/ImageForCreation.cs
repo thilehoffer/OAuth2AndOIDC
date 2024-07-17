@@ -1,9 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ImageGallery.Model
-{
-    public class ImageForCreation
-    {
+namespace ImageGallery.Model {
+    public class ImageForCreation {
         [Required]
         [MaxLength(150)]
         public string Title { get; set; }
@@ -11,10 +9,9 @@ namespace ImageGallery.Model
         [Required]
         public byte[] Bytes { get; set; }
 
-        public ImageForCreation(string title, byte[] bytes)
-        {
+        public ImageForCreation(string title, byte[] bytes) {
             Title = title;
             Bytes = bytes;
+            }
         }
     }
-}
